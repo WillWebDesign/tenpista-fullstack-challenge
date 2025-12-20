@@ -5,6 +5,9 @@ import com.tenpista.backend.domain.Transaction;
 import com.tenpista.backend.service.TransactionService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+
+import java.util.List;
+
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,25 +16,46 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class TransactionController {
 
-    private final TransactionService transactionService;
+  private final TransactionService transactionService;
 
-    @PostMapping
-    public ResponseEntity<TransactionResponse> create(
-            @Valid @RequestBody CreateTransactionRequest request
-    ) {
-        Transaction transaction = transactionService.create(request);
+  @GetMapping
+  public ResponseEntity<List<TransactionResponse>> findAll() {
 
-        TransactionResponse response = new TransactionResponse(
-                transaction.getId(),
-                transaction.getAmount(),
-                transaction.getMerchant(),
-                transaction.getTenpistaName(),
-                transaction.getTransactionDate(),
-                transaction.getCreatedAt()
-        );
+    List<TransactionResponse> response = transactionService.findAll()
+        .stream()
+        .map(t -> new TransactionResponse(
+            t.getId(),
+            t.getAmount(),
+            t.getMerchant(),
+            t.getTenpistaName(),
+            t.getTransactionDate(),
+            t.getCreatedAt()))
+        .toList();
 
-        return ResponseEntity
-                .status(HttpStatus.CREATED)
-                .body(response);
-    }
+    return ResponseEntity.ok(response);
+  }
+
+  @PostMapping
+  public ResponseEntity<TransactionResponse> create(
+      @Valid @RequestBody CreateTransactionRequest request) {
+    Transaction transaction = transactionService.create(request);
+
+    TransactionResponse response = new TransactionResponse(
+        transaction.getId(),
+        transaction.getAmount(),
+        transaction.getMerchant(),
+        transaction.getTenpistaName(),
+        transaction.getTransactionDate(),
+        transaction.getCreatedAt());
+
+    return ResponseEntity
+        .status(HttpStatus.CREATED)
+        .body(response);
+  }
+
+  @DeleteMapping("/{id}")
+  public ResponseEntity<Void> delete(@PathVariable Long id) {
+    transactionService.delete(id);
+    return ResponseEntity.noContent().build();
+  }
 }

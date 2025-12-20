@@ -11,16 +11,16 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class CreateTransactionRequest {
 
-    @NotNull
-    @Positive
-    private Integer amount;
+  @NotNull
+  @Positive
+  private Integer amount;
 
-    @NotBlank
-    private String merchant;
+  @NotBlank
+  private String merchant;
 
-    @NotBlank
-    private String tenpistaName;
+  @NotBlank
+  private String tenpistaName;
 
-    @NotNull
-    private LocalDateTime transactionDate;
+  @NotNull
+  private LocalDateTime transactionDate;
 }

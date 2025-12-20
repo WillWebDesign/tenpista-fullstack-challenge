@@ -8,10 +8,10 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class TransactionResponse {
 
-    private Long id;
-    private Integer amount;
-    private String merchant;
-    private String tenpistaName;
-    private LocalDateTime transactionDate;
-    private LocalDateTime createdAt;
+  private Long id;
+  private Integer amount;
+  private String merchant;
+  private String tenpistaName;
+  private LocalDateTime transactionDate;
+  private LocalDateTime createdAt;
 }
