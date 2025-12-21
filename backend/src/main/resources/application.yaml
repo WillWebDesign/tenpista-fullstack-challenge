@@ -26,3 +26,9 @@ server:
 logging:
   level:
     org.springframework.boot.context.config: DEBUG
+
+springdoc:
+  api-docs:
+    enabled: true
+  swagger-ui:
+    enabled: true
