@@ -19,5 +19,15 @@ services:
     env_file:
       - .env
 
+  frontend:
+    build: ./frontend
+    container_name: tenpista-frontend
+    ports:
+      - "3000:80"
+    depends_on:
+      - backend
+    env_file:
+      - .env
+
 volumes:
   pgdata:
