@@ -1,6 +1,7 @@
 package com.tenpista.backend.service;
 
-import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import com.tenpista.backend.api.dto.CreateTransactionRequest;
 import com.tenpista.backend.domain.Transaction;
@@ -9,7 +10,7 @@ public interface TransactionService {
 
   Transaction create(CreateTransactionRequest request);
 
-  List<Transaction> findAll();
+  Page<Transaction> findAll(Pageable pageable);
 
   void delete(Long id);
 }

@@ -11,7 +11,11 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
-import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
+import org.springframework.data.domain.Sort;
+import org.springdoc.core.annotations.ParameterObject;
 
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
@@ -27,23 +31,21 @@ public class TransactionController {
 
   @Operation(summary = "List all transactions")
   @ApiResponses({
-      @ApiResponse(responseCode = "200", description = "List of transactions", content = @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = TransactionResponse.class)))),
+      @ApiResponse(responseCode = "200", description = "List of transactions", content = @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = Page.class)))),
       @ApiResponse(responseCode = "500", description = "Internal server error", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
   })
-
   @GetMapping
-  public ResponseEntity<List<TransactionResponse>> findAll() {
+  public ResponseEntity<Page<TransactionResponse>> findAll(
+      @ParameterObject @PageableDefault(size = 10, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable) {
 
-    List<TransactionResponse> response = transactionService.findAll()
-        .stream()
+    Page<TransactionResponse> response = transactionService.findAll(pageable)
         .map(t -> new TransactionResponse(
             t.getId(),
             t.getAmount(),
             t.getMerchant(),
             t.getTenpistaName(),
             t.getTransactionDate(),
-            t.getCreatedAt()))
-        .toList();
+            t.getCreatedAt()));
 
     return ResponseEntity.ok(response);
   }

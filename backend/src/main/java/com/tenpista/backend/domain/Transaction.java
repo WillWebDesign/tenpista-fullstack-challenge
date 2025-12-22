@@ -5,6 +5,8 @@ import lombok.*;
 
 import java.time.LocalDateTime;
 
+import org.hibernate.annotations.CreationTimestamp;
+
 @Entity
 @Table(name = "transactions")
 @Getter
@@ -30,6 +32,7 @@ public class Transaction {
   @Column(name = "transaction_date", nullable = false)
   private LocalDateTime transactionDate;
 
-  @Column(name = "created_at", nullable = false, updatable = false, insertable = false)
+  @Column(name = "created_at", nullable = false, updatable = false)
+  @CreationTimestamp
   private LocalDateTime createdAt;
 }

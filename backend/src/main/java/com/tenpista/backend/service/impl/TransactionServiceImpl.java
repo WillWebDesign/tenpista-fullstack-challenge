@@ -10,7 +10,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 @Service
 @RequiredArgsConstructor
@@ -41,8 +42,8 @@ public class TransactionServiceImpl implements TransactionService {
   }
 
   @Override
-  public List<Transaction> findAll() {
-    return transactionRepository.findAll();
+  public Page<Transaction> findAll(Pageable pageable) {
+    return transactionRepository.findAll(pageable);
   }
 
   @Override

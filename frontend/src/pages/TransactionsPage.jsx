@@ -7,26 +7,32 @@ import GlobalLoading from '../components/GlobalLoading';
 import TransactionListSkeleton from '../components/TransactionListSkeleton';
 
 export default function TransactionsPage() {
+  const [page, setPage] = useState(0);
+  const [totalPages, setTotalPages] = useState(0);
   const [transactions, setTransactions] = useState([]);
   const [toast, setToast] = useState(null);
   const [initialLoading, setInitialLoading] = useState(true);
   const [actionLoading, setActionLoading] = useState(false);
 
-  const loadTransactions = useCallback(async (silent = false) => {
-    try {
-      if (!silent) setInitialLoading(true);
+  const loadTransactions = useCallback(
+    async (silent = false) => {
+      try {
+        if (!silent) setInitialLoading(true);
 
-      const res = await getTransactions();
-      setTransactions(res.data);
-    } catch {
-      setToast({
-        message: 'Error cargando transacciones',
-        type: 'error',
-      });
-    } finally {
-      if (!silent) setInitialLoading(false);
-    }
-  }, []);
+        const res = await getTransactions(page);
+        setTransactions(res.data.content);
+        setTotalPages(res.data.totalPages);
+      } catch {
+        setToast({
+          message: 'Error cargando transacciones',
+          type: 'error',
+        });
+      } finally {
+        if (!silent) setInitialLoading(false);
+      }
+    },
+    [page],
+  );
 
   useEffect(() => {
     loadTransactions();
@@ -84,7 +90,30 @@ export default function TransactionsPage() {
             {initialLoading ? (
               <TransactionListSkeleton />
             ) : (
-              <TransactionList transactions={transactions} onDelete={handleDelete} />
+              <>
+                <TransactionList transactions={transactions} onDelete={handleDelete} />
+                <div className='flex items-center justify-between mt-4'>
+                  <button
+                    disabled={page === 0}
+                    onClick={() => setPage((p) => p - 1)}
+                    className='px-4 py-2 text-sm rounded-lg border disabled:opacity-50'
+                  >
+                    Anterior
+                  </button>
+
+                  <span className='text-sm text-gray-600'>
+                    Página {page + 1} de {totalPages}
+                  </span>
+
+                  <button
+                    disabled={page + 1 >= totalPages}
+                    onClick={() => setPage((p) => p + 1)}
+                    className='px-4 py-2 text-sm rounded-lg border disabled:opacity-50'
+                  >
+                    Siguiente
+                  </button>
+                </div>
+              </>
             )}
           </div>
 

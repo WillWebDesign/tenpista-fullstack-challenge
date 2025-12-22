@@ -12,7 +12,8 @@ public class WebConfig implements WebMvcConfigurer {
     registry.addMapping("/**")
         .allowedOrigins(
             "http://localhost:5173", // Vite Local
-            "http://localhost:3000" // Docker
+            "http://localhost:3000", // Docker
+            "http://localhost:8080" // Backend Local
         )
         .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
         .allowedHeaders("*")
