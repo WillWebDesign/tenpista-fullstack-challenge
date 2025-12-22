@@ -1,6 +1,8 @@
 package com.tenpista.backend.api.error;
 
 import com.tenpista.backend.exception.BusinessException;
+
+import org.springframework.data.mapping.PropertyReferenceException;
 import org.springframework.http.*;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
@@ -47,6 +49,20 @@ public class GlobalExceptionHandler {
             500,
             "Internal Server Error",
             "Unexpected error occurred",
+            LocalDateTime.now()));
+  }
+
+  @ExceptionHandler({
+      PropertyReferenceException.class,
+      IllegalArgumentException.class
+  })
+  public ResponseEntity<ErrorResponse> handleInvalidPageable(Exception ex) {
+    return ResponseEntity
+        .badRequest()
+        .body(new ErrorResponse(
+            400,
+            "Bad request",
+            "Invalid pagination or sorting parameters",
             LocalDateTime.now()));
   }
 }

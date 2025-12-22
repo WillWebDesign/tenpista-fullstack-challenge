@@ -32,6 +32,7 @@ public class TransactionController {
   @Operation(summary = "List all transactions")
   @ApiResponses({
       @ApiResponse(responseCode = "200", description = "List of transactions", content = @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = Page.class)))),
+      @ApiResponse(responseCode = "400", description = "Bad request", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class))),
       @ApiResponse(responseCode = "500", description = "Internal server error", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
   })
   @GetMapping
